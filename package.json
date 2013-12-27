@@ -16,9 +16,9 @@
     "mocha": "~1.16.2",
     "should": "~2.1.1",
     "supertest": "~0.8.2",
-    "koa": "~0.1.2",
     "debug": "~0.7.4",
     "on-socket-error": "~1.1.0",
-    "koa-static": "~1.4.0"
+    "koa-static": "~1.4.0",
+    "koa": "~0.1.2"
   }
 }
