@@ -19,7 +19,9 @@ module.exports = function (opts) {
 			this.set('X-Accel-Buffering', 'no');
 			this.body = passthrough;
 			
-			wan.handler(this.req, passthrough, this.query);
+			wan.handler(this.req, passthrough, this.query, function (status) {
+				this.status = status;
+			}.bind(this));
 		}
 		else {
 			yield next;
