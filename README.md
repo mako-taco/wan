@@ -33,7 +33,7 @@ Every `img` tag in the DOM when `getImages` is called that has a `data-src` attr
 added to the request, and have its `src` set to a data URI as soon as it has been send to the client.
 The response is chunked and evaluated on every progress update in order to display images as soon as
 possible, without needing to wait for the response to finish.
-```javascript
+```html
 <img data-src="o.png" width="20" height="100"></img>
 <img data-src="m.png" width="20" height="100"></img>
 <img src="f.png" width="20" height="100"></img>
@@ -55,6 +55,26 @@ been loaded with Wan, it loses its `data-src` attribute for a `src` attribute.
 If `diskCache` is enabled, then the client will check Local Storage for the file before requestng it
 from the server. A response with a `Cache-Control: max-age` or `Expires` header will store a special value
 in local storage that will serve to invalidate the Local Storage cache appropriately.
+
+####Controlling the loading order
+You can control the order that your images load by adding the `priority` attribute to your `img` tags.
+Priorities should be integers.  Images with lower priorities load before images with higher priorities.
+Images without priorities are loaded after images with priorities. If image priorities are equal, then
+their order in the DOM is compared, loading images that appear higher in the DOM first.
+
+```html
+<!-- Loads second-->
+<img data-src="o.png" width="20" height="100" priority="3"></img>
+
+<!-- Loads last (no priority given) -->
+<img data-src="m.png" width="20" height="100"></img>
+
+<!-- Loads third -->
+<img data-src="f.png" width="20" height="100" priority="3"></img>
+
+<!-- Loads first -->
+<img data-src="g.png" width="20" height="100" priority="1"></img>
+```
 
 ##Creating Wan on the server
 Requiring `'wan/koa'` will give you middleware that you can use with Koa.  Requiring `'wan/express` will give you express middleware. 
