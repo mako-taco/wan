@@ -1,0 +1,1189 @@
+var Fx = fx = {};
+
+Function.prototype.FxBind = function(object)
+{
+	var __method = this;
+	return function()
+	{
+		return __method.apply(object, arguments);
+	}
+};
+Fx.Extend = function(destination, source)
+{
+	for (var property in source) destination[property] = source[property];
+	return destination;
+};
+Fx.Camelize = function(str)
+{
+	return str.replace(/-\D/gi, function(match)
+	{
+		return match.charAt(match.length - 1).toUpperCase();
+	});
+};
+Fx.CreateArray = function(array)
+{
+	var nArray = [];
+	for (var i = 0; i < array.length; i++)
+		nArray.push(array[i]);
+	return nArray;
+}
+Fx.GetElement = function()
+{
+	if (arguments.length == 1)
+		return get$(arguments[0]);
+	var elements = [];
+	Fx.CreateArray(arguments).each(function(el)
+	{
+		elements.push(get$(el));
+	});
+	return elements;
+
+	function get$(el)
+	{
+		if (typeof(el) == "string")
+			el = document.getElementById(el);
+		return el;
+	}
+};
+
+Fx.Base = function() { };
+Fx.Base.prototype = {
+	setOptions: function(options)
+	{
+		this.options = Fx.Extend({
+			onStart: function() { },
+			onComplete: function() { },
+			transition: Fx.Transitions.sineInOut,
+			duration: 500,
+			unit: "px",
+			wait: true,
+			fps: 50
+		}, options || { });
+	},
+	step: function()
+	{
+		var time = new Date().getTime();
+		if (time < this.time + this.options.duration)
+		{
+			this.cTime = time - this.time;
+			this.setNow();
+		}
+		else
+		{
+			setTimeout(this.options.onComplete.FxBind(this, this.element), 10);
+			this.clearTimer();
+			this.now = this.to;
+		}
+		this.increase();
+	},
+	setNow: function()
+	{
+		this.now = this.compute(this.from, this.to);
+	},
+	compute: function(from, to)
+	{
+		var change = to - from;
+		return this.options.transition(this.cTime, from, change, this.options.duration);
+	},
+	clearTimer: function()
+	{
+		clearInterval(this.timer);
+		this.timer = null;
+		return this;
+	},
+	_start: function(from, to)
+	{
+		if (!this.options.wait)
+			this.clearTimer();
+		if (this.timer)
+			return;
+		setTimeout(this.options.onStart.FxBind(this, this.element), 10);
+		this.from = from;
+		this.to = to;
+		this.time = new Date().getTime();
+		this.timer = setInterval(this.step.FxBind(this), Math.round(1000 / this.options.fps));
+		return this;
+	},
+	custom: function(from, to)
+	{
+		return this._start(from, to);
+	},
+	set: function(to)
+	{
+		this.now = to;
+		this.increase();
+		return this;
+	},
+	hide: function()
+	{
+		return this.set(0);
+	},
+	setStyle: function(e, p, v)
+	{
+		if (p == "opacity")
+		{
+			if (v == 0 && e.style.visibility != "hidden")
+				e.style.visibility = "hidden";
+			else if (e.style.visibility != "visible")
+				e.style.visibility = "visible";
+			if (typeof(document.body.style.opacity) == "undefined")
+			{
+				if (!e.currentStyle.hasLayout)
+					e.style.zoom = "1"; // Give it layout
+				e.style.filter = "alpha(opacity=" + v * 100 + ")";
+			}
+			e.style.opacity = v;
+		}
+		else
+			e.style[p] = v + this.options.unit;
+	}
+};
+
+Fx.Class = {
+	create: function()
+	{
+		return function()
+		{
+			this.initialize.apply(this, arguments);
+		}
+	}
+};
+Fx.Style = Fx.Class.create();
+Fx.Style.prototype = Fx.Extend(new Fx.Base(), {
+	initialize: function(el, property, options)
+	{
+		this.element = Fx.GetElement(el);
+		this.setOptions(options);
+		this.property = Fx.Camelize(property);
+	},
+	increase: function()
+	{
+		this.setStyle(this.element, this.property, this.now);
+	}
+});
+Fx.Styles = Fx.Class.create();
+Fx.Styles.prototype = Fx.Extend(new Fx.Base(), {
+	initialize: function(el, options)
+	{
+		this.element = Fx.GetElement(el);
+		this.setOptions(options);
+		this.now = {};
+	},
+	setNow: function()
+	{
+		for (p in this.from) this.now[p] = this.compute(this.from[p], this.to[p]);
+	},
+	custom: function(obj)
+	{
+		if (this.timer && this.options.wait)
+			return;
+		var from = {};
+		var to = {};
+		for (p in obj)
+		{
+			from[p] = obj[p][0];
+			to[p] = obj[p][1];
+		}
+		return this._start(from, to);
+	},
+	increase: function()
+	{
+		for (var p in this.now) this.setStyle(this.element, p, this.now[p]);
+	}
+});
+
+// Transitions (c) 2003 Robert Penner (http://www.robertpenner.com/easing/), BSD License.
+Fx.Transitions = {
+	linear: function(t, b, c, d)
+	{
+		return c * t / d + b;
+	},
+	sineInOut: function(t, b, c, d)
+	{
+		return -c / 2 * (Math.cos(Math.PI*t/d) - 1) + b;
+	}
+};
+
+/**mr.js
+ *
+ * M+R & Watershed Common Functions
+ * Copyright © 2013
+ * M+R and Watershed Company
+ * www.mrss.com
+ * 
+ */
+
+window.mr = {
+	Version: 1.20130829
+};
+
+window.Mr = window.mr;
+
+mr.Browser = {
+	isIE: document.all && !window.opera,
+	isCSS3IE: document.all && !window.opera && /Trident/i.test(navigator.userAgent) && !/Trident\/4\./i.test(navigator.userAgent),
+	isIE8: document.all && !window.opera && /MSIE 8\./.test(navigator.userAgent) && /Trident/i.test(navigator.userAgent),
+	isIE7: document.all && !window.opera && /MSIE 7\./.test(navigator.userAgent) && !/Trident/i.test(navigator.userAgent),
+	isIE6: document.all && !window.opera && /MSIE 6\./.test(navigator.userAgent) && !/Trident/i.test(navigator.userAgent),
+	isSafari: /Safari/.test(navigator.userAgent),
+	isMobileSafari: /AppleWebKit\/.+Mobile\//.test(navigator.userAgent),
+	isIPhone: /(iPhone|iPod)/.test(navigator.userAgent),
+	isIPad: /iPad/.test(navigator.userAgent),
+	isChrome: /Chrome\//.test(navigator.userAgent),
+	isFirefox: /Firefox/.test(navigator.userAgent),
+	isMobile: ((/mobile/i.test(navigator.userAgent) || /android/i.test(navigator.userAgent)) && screen.width <= 480) || (/android/i.test(navigator.userAgent) && screen.width == 720) || (/android/i.test(navigator.userAgent) && screen.width == 800), /* Android sometimes reports 720 or 800 instead of actual width */
+	isQuirksMode: !/CSS/i.test(document.compatMode),
+	supportsTransitions: (!/Android/i.test(navigator.userAgent) 
+		&&	(/Safari/i.test(navigator.userAgent) && /WebKit\/\d+/i.test(navigator.userAgent) && (parseInt(navigator.userAgent.match(/WebKit\/(\d+)/i)[1]) >= 531) && !/OS\sX\s10_[45]/i.test(navigator.userAgent) && !/Windows/i.test(navigator.userAgent))
+			|| (/Firefox\/\d+/i.test(navigator.userAgent) && parseInt(navigator.userAgent.match(/Firefox\/(\d+)/i)[1]) > 11)
+			|| (/Chrome\/\d+/i.test(navigator.userAgent) && parseInt(navigator.userAgent.match(/Chrome\/(\d+)/i)[1]) > 17))
+};
+
+mr.Test = {
+	/*
+	 * Test for empty input. This is the only testing function that auto-trims input.
+	 */
+	IsEmpty: function(str)
+	{
+		if (str.replace(/\s*/g, "").length == 0)
+			return true;
+		return false;
+	},
+	/*
+	 * Test for a valid email
+	 */
+	ValidEmail: function(str)
+	{
+		return (/^([\w\-\+]+)(\.[\w\-\+]+)*@([\w\-]+)(\.[\w\-]+)+$/.test(str));
+	},
+	/*
+	 * Test for a valid U.S. phone number
+	 */
+	ValidPhone: function(str, cellNumber)
+	{
+		var str = str.replace(/[\(\)\.\-\ ]/g, "");  //strip out acceptable non-numeric characters
+
+		if (!/^\d{10,11}$/.test(str))  // Must contain only 10 or 11 digits
+			return false;
+
+		if (/^1\d{10}/.test(str))  // If they used a starting 1, strip it
+			str = str.substring(1, 11);
+
+		// No phone numbers starting with 0 or 1, having 11 as the second and third digits, having 555 as the first 3 digits or 555 as the 3rd through 6th digits
+		if (/^([01]|\d11|555|\d{3}555)/.test(str))
+			return false;
+
+		if (cellNumber && /^(8(00|88|77|66)|9(00|76)|\d{3}976)/.test(str)) // No business or toll numbers: 800, 888, 877, 866, 900, 976, or ###-976
+			return false;
+
+		return true;
+	},
+	/*
+	 * Test for a valid numeric input
+	 */
+	ValidNumber: function(str, floatingPoint)
+	{
+		if (floatingPoint)
+			return /^[\d]+\.?[\d]+$/.test(str);
+		return /^\d+$/.test(str);
+	},
+	/*
+	 * Test for a valid credit card number
+	 */
+	ValidCreditCard: function(cardNumber)
+	{
+		cardNumber = cardNumber.replace(/[\s\-]/g, "");
+
+		// The CC number is all numbers and length of 15+	
+		if (cardNumber == cardNumber.replace(/[^\d]/g, "") && cardNumber.length >= 15)
+		{
+			var total = 0;
+
+			for (var i = cardNumber.length; i > 0; i--)
+			{
+				digit = parseInt(cardNumber) % 10;  // Get right digit
+				total += digit;
+				i--;
+				cardNumber = cardNumber / 10;  // Will remove right most digit
+				digit = (parseInt(cardNumber) % 10) * 2;  // Double every other digit
+
+				switch (digit)
+				{
+					case 10:
+						digit = 1;
+						break;
+					case 12:
+						digit = 3;
+						break;
+					case 14:
+						digit = 5;
+						break;
+					case 16:
+						digit = 7;
+						break;
+					case 18:
+						digit = 9;
+						break;
+				}
+
+				cardNumber = cardNumber / 10;  // Will remove right most digit
+				total += digit;
+			}
+
+			if (total % 10 == 0)
+				return true;
+		}
+
+		return false;
+	}
+};
+
+mr.Get = {
+	/*
+	 * Runs function when document is ready
+	 */
+	Ready: function(onReady)
+	{
+		if (typeof(document.addEventListener) == "function")
+			document.addEventListener("DOMContentLoaded", onReady, false);
+		else
+			window.attachEvent("onload", onReady);
+	},
+	/*
+	 * Get URL query parameter
+	 */
+	Parameter: function(param)
+	{
+		var regex = new RegExp("[\\?&]" + param.replace(/\[/,"\\\[").replace(/\]/,"\\\]") + "=([^&#]*)");
+		var result = regex.exec(window.location.href);
+		return (result == null) ? "" : result[1];
+	},
+	/* 
+	 * Get the current style of an element:
+	 * http://robertnyman.com/2006/04/24/get-the-rendered-style-of-an-element/
+	 */
+	ElementStyle: function(oElm, strCssRule)
+	{
+		var strValue = "";
+		if (document.defaultView && document.defaultView.getComputedStyle)
+		{
+			strValue = document.defaultView.getComputedStyle(oElm, "").getPropertyValue(strCssRule);
+		}
+		else if (oElm.currentStyle)
+		{
+			strCssRule = strCssRule.replace(/\-(\w)/g, function(strMatch, p1)
+			{
+				return p1.toUpperCase();
+			});
+			strValue = oElm.currentStyle[strCssRule];
+		}
+		return strValue;
+	},
+	/*
+	 * Get next highest Z-index
+	 */
+	NextHighestZindex: function()
+	{
+		var highestIndex = 0;
+		var currentIndex = 0;
+
+		var elmArray = document.getElementsByTagName('*');
+
+		for (var i = 0; i < elmArray.length; i++)
+		{
+			currentIndex = parseFloat(mr.Get.ElementStyle(elmArray[i], "z-index"));
+	
+			if (!isNaN(currentIndex) && (currentIndex > highestIndex) && currentIndex < 99999999)
+				highestIndex = currentIndex;
+		}
+		return (highestIndex + 1);  
+	}
+};
+
+/*
+ * Popup Dialog
+ * Prerequisites: mr.Get
+ *
+ * Not quirksmode safe -- for quirksmode, use mr.Lightbox and build your own HTML dialog
+ * Mobile support.
+ */
+mr.Dialog = function()
+{
+	if (mr.Dialog.initialized)
+		return;
+
+	mr.Dialog.initialized = true;
+};
+
+mr.Dialog.prototype = {
+	Show: function(title, text, button, options)
+	{
+		if (options)
+		{
+			if (options.lightColorScheme == true)
+				this.lightColorScheme = true;
+			if (typeof(options.onClose) == "function")
+				this._onClose = options.onClose;
+		}
+		
+		this.bgElement = document.createElement("div");
+		this.bgElement.style.position = "fixed";
+		
+		if (!mr.Browser.isIE || (mr.Browser.isCSS3IE && !mr.Browser.isQuirksMode))
+		{
+			this.bgElement.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+		}
+		else
+		{
+			this.bgElement.style.backgroundColor = "#000000"; // Fall back for old IE
+			this.bgElement.style.filter = "alpha(opacity=60)";
+		}
+		
+		this.bgElement.style.top = "0px";
+		this.bgElement.style.left = "0px";
+		this.bgElement.style.bottom = "0px";
+		this.bgElement.style.right = "0px";
+		this.bgElement.style.zIndex =  mr.Get.NextHighestZindex();  // Make sure it is above other elements
+
+		this.msgElement = document.createElement("span");
+		this.msgElement.style.display = "block";
+		this.msgElement.style.zIndex = parseInt(this.bgElement.style.zIndex) + 1;  // Make sure it is above background
+		this.msgElement.style.position = "fixed";
+		this.msgElement.style.borderRadius = "10px";
+		this.msgElement.style.boxShadow = "0px 0px 8px #262626";
+		this.msgElement.style.padding = "20px";
+		this.msgElement.style.fontFamily = "arial, helvetica, sans-serif";
+		this.msgElement.style.fontSize = "16px";
+		this.msgElement.style.lineHeight = "19px";
+		
+		this.headElement = document.createElement("span");
+		this.headElement.style.display = "block";
+		this.headElement.style.textAlign = "center";
+		this.headElement.style.fontSize = "18px";
+		this.headElement.style.fontWeight = "bold";
+		this.headElement.style.marginBottom = "16px";
+		this.headElement.innerHTML = title;
+		
+		this.innerElement = document.createElement("span");
+		this.innerElement.innerHTML = text;
+		
+		this.btnElement = document.createElement("span");
+		this.btnElement.style.display = "block";
+		this.btnElement.style.textAlign = "center";
+		this.btnElement.style.fontSize = "18px";
+		this.btnElement.style.fontWeight = "bold";
+		this.btnElement.style.cursor = "pointer";
+		this.btnElement.style.marginTop = "16px";
+		this.btnElement.innerHTML = button;
+		
+		var thisDialog = this;
+		this.btnElement.onclick = function()
+		{
+			thisDialog.Hide();
+		};
+		this.msgElement.appendChild(this.headElement);
+		this.msgElement.appendChild(this.innerElement);
+		this.msgElement.appendChild(this.btnElement);
+		
+		// Setup light/dark color scheme
+		if (this.lightColorScheme)
+		{
+			this.headElement.style.color = "#c00";
+			this.msgElement.style.backgroundColor = "#fff";
+			this.msgElement.style.color = "#000";
+			this.btnElement.style.color = "#c00";
+		}
+		else
+		{
+			this.msgElement.style.border = "2px solid #fff";
+			this.msgElement.style.backgroundColor = "#464646";
+			this.msgElement.style.color = "#fff";
+		}
+		
+		document.body.appendChild(this.bgElement);
+		document.body.appendChild(this.msgElement);
+		
+		if (typeof(document.body.style.opacity) == "undefined")
+		{
+			this.bgElement.style.filter = "alpha(opacity=1)";
+			this.msgElement.style.filter = "alpha(opacity=1)";
+		}
+		else
+		{
+			this.bgElement.style.opacity = "0.01";
+			this.msgElement.style.opacity = "0.01";
+		}
+		
+		this.msgElement.style.marginTop = (-1 * this.msgElement.offsetHeight / 2) + "px";
+		this.msgElement.style.top = "50%";
+		this.msgElement.style.marginLeft = (-1 * this.msgElement.offsetWidth / 2) + "px";
+		this.msgElement.style.left = "50%";
+
+		// Always make sure it's visible on Mobile:
+		if (mr.Browser.isMobile)
+		{
+			this.bgElement.scrollIntoView();
+			this.bgElement.style.minHeight = document.body.offsetHeight + "px";
+		}
+
+		if (window.innerHeight < this.msgElement.offsetHeight)
+		{
+			this.msgElement.style.position = "absolute";
+			this.msgElement.style.top = "0";
+			this.msgElement.style.marginTop = "0";
+			this.msgElement.scrollIntoView();
+		}
+		
+		// Fade in, if any libraries are available
+		if (typeof(Fx) == "object")
+		{
+			this.bgElement.wsFx = new Fx.Style(this.bgElement, 'opacity', {duration: 300});
+			this.bgElement.wsFx._start(0.01, 1.0);
+			this.msgElement.wsFx = new Fx.Style(this.msgElement, 'opacity', {duration: 300});
+			this.msgElement.wsFx._start(0.01, 1.0);
+		}
+		else if (typeof(jQuery) == "function")
+		{
+			// Animate with jQuery, if loaded:
+			jQuery(this.bgElement).fadeTo(300, 1.0);
+			jQuery(this.msgElement).fadeTo(300, 1.0);
+		}
+		else
+		{
+			if (typeof(document.body.style.opacity) == "undefined")
+			{
+				this.bgElement.style.filter = "alpha(opacity=100)";
+				this.msgElement.style.filter = "alpha(opacity=100)";
+			}
+			else
+			{
+				this.bgElement.style.opacity = "1";
+				this.msgElement.style.opacity = "1";
+			}
+		}
+		
+		// Escape key will close dialog:
+		if (typeof(document.onkeyup) == "function")
+			this._previousOnKeyUp = document.onkeyup;
+		document.onkeyup = function(e)
+		{
+			e = e || window.event;
+
+			if (e.keyCode == 27)
+				thisDialog.Hide();
+		};
+	},
+	Hide: function()
+	{
+		// Restore any existing onkeyup
+		document.onkeyup = this._previousOnKeyUp;
+		
+		this._onClose(this);
+		
+		var thisDialog = this;
+		
+		// Fade out, if any libraries are available
+		if (typeof(Fx) == "object")
+		{
+			this.bgElement.wsFx = new Fx.Style(this.bgElement, 'opacity', {duration: 300});
+			this.bgElement.wsFx._start(1.0, 0.01);
+
+			this.msgElement.wsFx = new Fx.Style(this.msgElement, 'opacity', {duration: 300, onComplete: function()
+			{
+				thisDialog._hideComplete();
+			}});
+			this.msgElement.wsFx._start(1.0, 0.01);
+		}
+		else if (typeof(jQuery) == "function")
+		{
+			jQuery(this.bgElement).fadeTo(300, 0);
+			jQuery(this.msgElement).fadeTo(300, 0, function()
+			{
+				thisDialog._hideComplete();
+			});
+		}
+		else
+		{
+			this._hideComplete();
+		}	
+	},
+	_hideComplete: function()
+	{
+		document.body.removeChild(this.bgElement);
+		document.body.removeChild(this.msgElement);
+	},
+	_previousOnKeyUp: function() { },
+	_onClose: function() { }
+};
+
+/*
+ * Lightbox
+ * Prerequisites: mr.Browser, mr.Get
+ *
+ * Works on both quirksmode and strict pages.
+ * Mobile support.
+ * If lightbox content is taller/wider than page, allows lightbox content to scroll.
+ */
+mr.Lightbox = function()
+{
+	if (mr.Lightbox.initialized)
+		return;
+
+	mr.Lightbox.initialized = true;
+};
+
+mr.Lightbox.prototype = {
+	backgroundColor: "#000000",
+	/*
+	 * Creates and populates a in-DOM popup lightbox, styled with user HTML
+	 * Give all your close buttons a class of mr_lightbox_close_button
+	 * onClose function will be called with reference to clicked element as first parameter,
+	 * enabling you to determine what button was clicked.
+	 */
+	Show: function(html, widthOfPopup, heightOfPopup, options)
+	{
+		this.widthOfPopup = widthOfPopup;
+		this.heightOfPopup = heightOfPopup;
+		
+		if (options)
+		{
+			if (typeof(options.onClose) == "function")
+				this._onClose = options.onClose;
+			if (options.backgroundColor)
+				this.backgroundColor = options.backgroundColor;
+			if (options.backgroundClickCloses == true)
+				this.backgroundClickCloses = true;
+			if (mr.Browser.isMobile && !isNaN(options.mobileWidth) && !isNaN(options.mobileHeight))
+			{
+				this.widthOfPopup = options.mobileWidth;
+				this.heightOfPopup = options.mobileHeight;
+			}
+		}
+
+		// Setup inner content
+		this.contentDiv = document.createElement("div");
+		this.contentDiv.className = "mr_lightbox_content mr_lightbox_custom_content";
+		this.contentDiv.style.position = "relative";
+		this.contentDiv.innerHTML = html;
+		this.contentDiv.style.width = this.widthOfPopup + "px";
+		this.contentDiv.style.height = this.heightOfPopup + "px";
+		this.contentDiv.style.marginLeft = "auto";
+		this.contentDiv.style.marginRight = "auto";
+
+		var thisLightbox = this;
+		var contentDivSpans = this.contentDiv.getElementsByTagName("*");
+		for (var i = 0; i < contentDivSpans.length; i++)
+		{
+			if (/mr_lightbox_close_button/.test(contentDivSpans[i].className))
+			{
+				contentDivSpans[i].onclick = function()
+				{
+					thisLightbox._onClose(this);  // Call on close function provided by user
+					thisLightbox.Hide();
+					return false; // Cancel the event
+				};
+			}
+		}
+
+		this._build();
+		
+		if (this.backgroundClickCloses)
+		{
+			this.backgroundDiv.onclick = function()
+			{
+				thisLightbox._onClose(this);  // Call on close function provided by user
+				thisLightbox.Hide();
+				return false; // Cancel the event
+			};
+			this.popupDiv.onclick = this.backgroundDiv.onclick;
+			
+			// Prevent contentDiv events from bubbling:
+			this.contentDiv.onclick = function(e)
+			{
+				// Stop event from bubbling:
+				e = e || window.event;
+				e.cancelBubble = true;
+
+				if (e.stopPropagation)
+					e.stopPropagation();
+			};
+		}
+	},
+	/*
+	 * Begins removal of an in-DOM popup lightbox
+	 */
+	Hide: function()
+	{
+		 // Prevent hide function from being called twice (i.e. user double-clicks background)
+		if (this.hideCalled)
+			return;
+
+		this.hideCalled = true;
+
+		window.onresize = this._previousOnResize;
+		window.onscroll = this._previousOnScroll;
+
+		// We would lose reference to the lightbox during callback functions too, so store "this" in thisLightbox
+		var thisLightbox = this;
+
+		if (typeof(Fx) == "object")
+		{
+			// See if Moo Fx library is loaded		
+			this.backgroundDiv.wsFx = new Fx.Style(this.backgroundDiv, 'opacity', {duration: 300});
+			this.backgroundDiv.wsFx._start(0.5, 0.01);
+
+			this.popupDiv.wsFx = new Fx.Style(this.popupDiv, 'opacity', {duration: 300, onComplete: function()
+			{
+				thisLightbox._hideComplete();
+			}});
+			this.popupDiv.wsFx._start(1.0, 0.01);
+		}
+		else if (typeof(jQuery) == "function")
+		{
+			// Animate with jQuery, if loaded:
+			this.backgroundDiv.wsFx = jQuery(this.backgroundDiv).fadeTo(300, 0);
+			
+			this.popupDiv.wsFx = jQuery(this.popupDiv).fadeTo(300, 0, function()
+			{
+				thisLightbox._hideComplete();
+			});
+		}
+		else
+		{
+			this._hideComplete();
+		}
+	},
+	/*
+	 * Removes an in-DOM popup lightbox
+	 */
+	_hideComplete: function()
+	{
+		this.backgroundDiv.parentNode.removeChild(this.backgroundDiv);
+		this.popupDiv.parentNode.removeChild(this.popupDiv);
+		if (mr.Browser.isIE6 && this.hiddenSelects)
+		{
+			for (var i = 0; i < this.hiddenSelects.length; i++)
+				this.hiddenSelects[i].style.visibility = "visible";
+		}
+		if (mr.Browser.isQuirksMode && mr.Browser.isIE)
+		{
+			document.body.scroll = "yes"; // Re-enable scrolling in IE
+		}
+		
+		var htmlTag = document.getElementsByTagName("html")[0];
+		htmlTag.style.overflow = "auto";
+		// IE10 requires us to be explicit:
+		htmlTag.style.overflowY = "auto";
+		htmlTag.style.overflowX = "auto";
+	},
+	/*
+	 * Computes scrollbar widths. Based on code from:
+	 * http://www.alexandre-gomes.com/?p=115
+	 */
+	_getScrollBarWidth: function()
+	{
+		var inner = document.createElement("div");
+		inner.style.width = "100%";
+		inner.style.height = "200px";
+		inner.style.margin = "0px";
+		inner.style.padding = "0px";
+		inner.style.border = "0px";
+
+		var outer = document.createElement("div");
+		outer.style.position = "absolute";
+		outer.style.top = "0px";
+		outer.style.left = "0px";
+		outer.style.visibility = "hidden";
+		outer.style.width = "200px";
+		outer.style.height = "150px";
+		outer.style.overflow = "hidden";
+		outer.style.margin = "0px";
+		outer.style.padding = "0px";
+		outer.style.border = "0px";
+		outer.appendChild(inner);
+
+		document.body.appendChild(outer);
+		var w1 = inner.offsetWidth;
+		outer.style.overflow = "scroll";
+		var w2 = inner.offsetWidth;
+		if (w1 == w2)
+			w2 = outer.clientWidth;
+
+		document.body.removeChild(outer);
+
+		return (w1 - w2);
+	},
+	/*
+	 * Sizes or resizes the lightbox to the browser window
+	 */
+	_sizeLightbox: function()
+	{
+		var marginOffset = 0;
+
+		var browserViewportHeight;
+		var browserViewportWidth;
+		if (mr.Browser.isIE && mr.Browser.isQuirksMode)
+		{
+			browserViewportHeight = document.body.clientHeight;  // Quirksmode IE <9
+			browserViewportWidth = document.body.clientWidth;  // Quirksmode IE <9
+		}
+		else if (mr.Browser.isIE && !mr.Browser.isCSS3IE)
+		{
+			browserViewportHeight = document.documentElement.clientHeight;  // Strict IE <9
+			browserViewportWidth = document.documentElement.clientWidth;  // Strict IE <9
+		}
+		else
+		{
+			browserViewportHeight = window.innerHeight;
+			browserViewportWidth = window.innerWidth;
+		}
+		
+		// Page height will never be less than window height:
+		var pageHeight = Math.max(browserViewportHeight, document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight);
+		var pageWidth = Math.max(browserViewportWidth, document.body.scrollWidth, document.documentElement.scrollWidth, document.body.offsetWidth, document.documentElement.offsetWidth, document.body.clientWidth, document.documentElement.clientWidth);
+		
+		if (!mr.Browser.isIE || mr.Browser.isCSS3IE)
+		{
+			var hScroll = ((mr.Browser.isIE && !(mr.Browser.isCSS3IE && !mr.Browser.isQuirksMode)) ? document.scrollLeft : window.pageXOffset);
+			var vScroll = ((mr.Browser.isIE && !(mr.Browser.isCSS3IE && !mr.Browser.isQuirksMode)) ? document.scrollTop : window.pageYOffset);
+			var scrolledToTop = false;
+
+			// Need to determine if popup is taller than visible portion of screen.
+			if (this.heightOfPopup > browserViewportHeight)
+			{
+				// If so disable page scroll, let popup contents scroll instead
+				this.popupDiv.style.overflowY = "auto";
+				this.popupDiv.style.maxHeight = browserViewportHeight + "px";
+				this.popupDiv.style.maxWidth = browserViewportWidth + "px";
+				window.scroll(0, 0);  // Scroll to top
+				scrolledToTop = true;
+				document.getElementsByTagName("html")[0].style.overflowY = "hidden";
+			}
+			else
+			{
+				document.getElementsByTagName("html")[0].style.overflowY = "auto";
+				this.popupDiv.style.overflowY = "visible";
+			}
+
+			// Need to determine if popup is wider than visible portion of screen.
+			if (this.widthOfPopup > browserViewportWidth)
+			{
+				// If so disable page scroll, let popup contents scroll instead
+				this.popupDiv.style.overflowX = "auto";
+				this.popupDiv.style.maxHeight = browserViewportHeight + "px";
+				this.popupDiv.style.maxWidth = browserViewportWidth + "px";
+				window.scroll(0, 0);  // Scroll to top
+				scrolledToTop = true;
+				document.getElementsByTagName("html")[0].style.overflowX = "hidden";
+			}
+			else
+			{
+				document.getElementsByTagName("html")[0].style.overflowX = "auto";
+				this.popupDiv.style.overflowX = "visible";
+			}
+
+			if (!scrolledToTop)
+				window.scroll(hScroll, vScroll);  // Scroll to previous position (changing scroll on HTML element causes some browsers to scroll to top)
+		}
+		else
+		{
+			// It's IE < 9, so need to determine if popup is bigger than visible portion of screen.
+			if (this.heightOfPopup > browserViewportHeight || this.widthOfPopup > browserViewportWidth)
+			{
+				// If so disable page scroll, let popup contents scroll instead
+				this.popupDiv.style.overflow = "scroll";
+				this.popupDiv.style.height = browserViewportHeight + "px";
+				this.popupDiv.style.width = browserViewportWidth + "px";
+
+				if (this.widthOfPopup > browserViewportWidth)
+				{
+					this.popupDiv.style.height = browserViewportHeight - (this.scrollBarWidth + parseInt(document.body.currentStyle.marginTop) + parseInt(document.body.currentStyle.marginBottom)) + "px";
+					window.onscroll = function() { };
+				}
+
+				// If we weren't already scrolled to the top, move up the background div
+				if (mr.Browser.isQuirksMode)
+					this.backgroundDiv.style.marginTop = "0px";
+
+				window.scroll(0, 0);  // Scroll to top		
+				document.getElementsByTagName("html")[0].style.overflow = "hidden";
+			}
+			else
+			{
+				// Reset scrolling to HTML:
+				window.onscroll = window.onresize;
+				document.getElementsByTagName("html")[0].style.overflow = "auto";
+				this.popupDiv.style.overflow = "hidden";
+			}
+		}
+		
+		// Set background div height and calculate margin offset:
+		if (mr.Browser.isMobileSafari)
+		{
+			this.backgroundDiv.style.width = browserViewportWidth + "px";
+			this.backgroundDiv.style.height = browserViewportHeight + window.pageYOffset + "px";
+
+			// We have to factor in scroll offset on Mobile Safari since there is no CSS fixed positioning
+			marginOffset = ((browserViewportHeight - this.heightOfPopup) / 2) + window.pageYOffset;
+		}
+		else if (mr.Browser.isQuirksMode && mr.Browser.isIE)
+		{
+			this.backgroundDiv.style.width = browserViewportHeight + "px";
+
+			// If page is scrolled down and refreshed in quirksmode IE, the page scrolls without the bg
+			// Add in height for a possible horizontal scroll bar:
+			this.backgroundDiv.style.height = (browserViewportHeight + document.body.scrollTop + this.scrollBarWidth) + "px";
+
+			marginOffset = ((browserViewportHeight - this.heightOfPopup) / 2) + document.body.scrollTop;
+		}
+		else if (!mr.Browser.isCSS3IE && mr.Browser.isIE)
+		{
+			// We have to factor in scroll offset on old IE since there is no CSS fixed positioning
+			marginOffset = ((browserViewportHeight - this.heightOfPopup) / 2) + document.documentElement.scrollTop;
+
+			// Include page margins on Old IE:
+			this.backgroundDiv.style.width = pageWidth + "px";
+
+			this.backgroundDiv.style.height = pageHeight + "px";
+		}
+		else
+		{
+			marginOffset = ((browserViewportHeight - this.heightOfPopup) / 2);
+		}
+
+		if (marginOffset < 0)
+			marginOffset = 0;
+		
+		// Just in case for other browsers and needed for IE 7:
+		if (this.backgroundDiv.offsetHeight < pageHeight || this.backgroundDiv.offsetHeight < browserViewportHeight)
+			this.backgroundDiv.style.height = Math.max(pageHeight, browserViewportHeight) + "px";
+		if (this.backgroundDiv.offsetWidth < pageWidth || this.backgroundDiv.offsetWidth < browserViewportWidth)
+			this.backgroundDiv.style.width = Math.max(pageWidth, browserViewportWidth) + "px";
+
+		// Set the size of the Popup Div, partially based on margin offset:
+		if ((mr.Browser.isIE && !mr.Browser.isCSS3IE) || (mr.Browser.isCSS3IE && mr.Browser.isQuirksMode))
+		{
+			if (mr.Browser.isQuirksMode)
+			{
+				// The window cannot be scrolled in legacy mode:
+				window.scroll(0, 0);  // Scroll to top	
+				this.backgroundDiv.style.marginTop = "0px";
+				this.popupDiv.style.width = browserViewportWidth + "px";
+				this.popupDiv.style.height = Math.max((browserViewportHeight - marginOffset), 0) + "px";
+			}
+			else
+			{
+				this.popupDiv.style.height = browserViewportHeight + "px";
+				this.popupDiv.style.width = browserViewportWidth + "px";
+				this.popupDiv.style.overflow = "auto";
+
+				// We need to scroll horizontally
+				if (this.widthOfPopup > browserViewportWidth)
+				{
+					// Also need to set the height here, otherwise scrollbar will be out of sight!
+					this.popupDiv.style.height = Math.max(browserViewportHeight - marginOffset, 0) + "px";
+				}
+			}
+		}
+		this.popupDiv.style.marginTop = marginOffset + "px";
+	},
+	/*
+	 * Builds the elements for an in-DOM popup lightbox
+	 */
+	_build: function()
+	{	
+		// Create a translucent background div to go behind popup div
+		this.backgroundDiv = document.createElement("div");
+		this.backgroundDiv.style.top = "0px";
+		this.backgroundDiv.style.right = "0px";
+		this.backgroundDiv.style.bottom = "0px";	
+		this.backgroundDiv.style.left = "0px";
+		this.backgroundDiv.style.backgroundColor = this.backgroundColor;
+		this.backgroundDiv.style.zIndex = mr.Get.NextHighestZindex();  // Make sure it is above other elements
+		this.backgroundDiv.className = "mr_lightbox_background mr_lightbox_rear";
+
+		// Create the popup div
+		this.popupDiv = document.createElement("div");
+		this.popupDiv.style.marginLeft = "auto";
+		this.popupDiv.style.marginRight = "auto";
+		this.popupDiv.style.textAlign = "center";
+		this.popupDiv.style.top = "0px";
+		this.popupDiv.style.right = "0px";
+		this.popupDiv.style.bottom = "0px";
+		this.popupDiv.style.left = "0px";
+		this.popupDiv.style.zIndex = parseInt(this.backgroundDiv.style.zIndex) + 1;  // Make sure it is above background
+		this.popupDiv.className = "mr_lightbox_background mr_lightbox_front";
+		
+		if (typeof(document.body.style.opacity) == "undefined")
+		{
+			this.backgroundDiv.style.filter = "alpha(opacity=1)";
+			this.popupDiv.style.filter = "alpha(opacity=1)";
+		}
+		else
+		{
+			this.backgroundDiv.style.opacity = "0.01";
+			this.popupDiv.style.opacity = "0.01";
+		}
+		
+		this.contentDiv.style.outline = "none";
+		this.contentDiv.style.zIndex = parseInt(this.popupDiv.style.zIndex) + 1;  // And put it on top of the popup
+
+		this.scrollBarWidth = this._getScrollBarWidth();
+
+		// Perform some browser-specific things, letting all IE < 9 (or 9+ quirks) and Mobile Safari see this code path:
+		if ((mr.Browser.isIE && !mr.Browser.isCSS3IE) || (mr.Browser.isCSS3IE && mr.Browser.isQuirksMode) || mr.Browser.isMobileSafari)
+		{
+			this.backgroundDiv.style.position = "absolute";
+			this.popupDiv.style.position = "absolute";
+
+			if (mr.Browser.isMobileSafari)
+			{
+				this.popupDiv.style.width = "100%";
+				this.popupDiv.style.height = "100%";
+				this.popupDiv.style.minWidth = this.widthOfPopup + "px";  // For Mobile Safari only!
+				this.popupDiv.style.minHeight = this.heightOfPopup + "px";
+			}
+
+			if (mr.Browser.isIE6)
+			{
+				// Need to hide all the SELECT elements in the DOM, since IE6 has a Z-order bug:
+				this.hiddenSelects = Array();
+				var selectsToHide = document.getElementsByTagName("select");
+
+				for (var i = 0; i < selectsToHide.length; i++)
+				{
+					if (selectsToHide[i].style.visibility.toLowerCase() != "hidden")
+					{
+						selectsToHide[i].style.visibility = "hidden";
+						this.hiddenSelects.push(selectsToHide[i]);
+					}	
+				}
+			}
+
+			if (mr.Browser.isQuirksMode && mr.Browser.isIE)
+			{
+				// Instead of window.scroll(0, 0) set margin on background to (quirksmode) scroll top
+				// Account for possibility of horizontal scrollbar disappearing and shifting contents down:
+				this.backgroundDiv.style.marginTop = document.body.scrollTop - this.scrollBarWidth + "px";
+				document.body.scroll = "no";
+			}
+
+			// Need to run this now too:
+			this._sizeLightbox();  // we will run it again later in this function too; this is intentional
+		}
+		else
+		{
+			// Set top margin so that image displays centered, unless window is too short
+			this.backgroundDiv.style.position = "fixed";
+			this.popupDiv.style.position = "fixed";
+		}
+
+		this.popupDiv.appendChild(this.contentDiv);
+		if (document.body.firstChild)
+		{
+			// If possible insert at top of document for accessibility
+			document.body.insertBefore(this.backgroundDiv, document.body.firstChild);
+			document.body.insertBefore(this.popupDiv, this.backgroundDiv.nextSibling);
+		}
+		else
+		{
+			document.body.appendChild(this.backgroundDiv);
+			document.body.appendChild(this.popupDiv);
+		}
+		this._sizeLightbox();  // Size and position the lightbox
+
+		// Setup window onresize event to handle popup position and background size on browser size change:
+		if (typeof(window.onresize) == "function")
+			this._previousOnResize = window.onresize;
+		if (typeof(window.onscroll) == "function")
+			this._previousOnScroll = window.onscroll;
+		var thisLightbox = this;
+		window.onresize = function()
+		{
+			thisLightbox._previousOnResize();
+			thisLightbox._sizeLightbox();
+		};
+
+		// If content is taller than page, don't setup scroll to do resize:
+		if (mr.Browser.isIE && (document.body.clientHeight > this.heightOfPopup) && !(mr.Browser.isCSS3IE && !mr.Browser.isQuirksMode))
+			window.onscroll = window.onresize;
+
+		// This way scroll wheel is focused correctly for IE, but still a good idea other browsers:
+		// IE jumps the page lower/higher if we set focus to an element not completely on the screen:
+		this.contentDiv.focus();
+
+		if (typeof(Fx) == "object")
+		{
+			// See if Fx library is loaded:
+			this.backgroundDiv.wsFx = new Fx.Style(this.backgroundDiv, 'opacity', {duration: 750});
+			this.backgroundDiv.wsFx._start(0.01, 0.5);
+			this.popupDiv.wsFx = new Fx.Style(this.popupDiv, 'opacity', {duration: 500});
+			this.popupDiv.wsFx._start(0.01, 1.0);
+		}
+		else if (typeof(jQuery) == "function")
+		{
+			// Animate with jQuery, if loaded:
+			this.backgroundDiv.wsFx = jQuery(this.backgroundDiv).fadeTo(750, 0.5);
+			this.popupDiv.wsFx = jQuery(this.popupDiv).fadeTo(500, 1.0);
+		}
+		else
+		{
+			if (typeof(document.body.style.opacity) == "undefined")
+			{
+				this.backgroundDiv.style.filter = "alpha(opacity=50)";
+				this.popupDiv.style.filter = "alpha(opacity=100)";
+			}
+			else
+			{
+				this.backgroundDiv.style.opacity = "0.5";
+				this.popupDiv.style.opacity = "1";
+			}
+		}
+	},
+	/* Used for storing existing onresize functions */
+	_previousOnResize: function() { },
+	/* Used for storing existing onscroll functions */
+	_previousOnScroll: function() { },
+	_onClose: function() { }
+};
+
+/*
+ * Cookie handling:
+ */
+mr.Cookie = {};
+
+mr.Cookie = {
+	Get: function(cookieName)
+	{
+		if (document.cookie.length > 0)
+		{
+			var cookieStart = document.cookie.indexOf(cookieName + "=");
+			if (cookieStart != -1)
+			{
+				cookieStart += cookieName.length + 1;
+				var cookieEnd = document.cookie.indexOf(";", cookieStart);
+				if (cookieEnd == -1)
+					cookieEnd = document.cookie.length;
+				return unescape(document.cookie.substring(cookieStart, cookieEnd));
+			}
+		}
+		return "";
+	},
+	Set: function(name, value, time, format)
+	{
+		var expireDate = new Date();
+
+		format = format.toLowerCase();
+		if (format == "m")
+			expireDate.setMinutes(expireDate.getMinutes() + parseInt(time));
+		else if (format == "h")
+			expireDate.setHours(expireDate.getHours() + parseInt(time));
+		else
+			expireDate.setDate(expireDate.getDate() + parseInt(time));
+
+		document.cookie = name + "=" + value + ";expires=" + expireDate.toUTCString() + ";path=/";
+	}
+};
+
+/* EOF */
+

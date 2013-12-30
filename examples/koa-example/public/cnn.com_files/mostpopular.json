@@ -1,0 +1,82 @@
+parseNowPlayingJSON_420459([
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131229132541-newday-vo-steele-mexico-coastal-road-collapse-00001217-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/world/2013/12/29/newday-vo-steele-mexico-coastal-road-collapse.cnn",
+      "trt" : "38",
+      "id" : "world/2013/12/29/newday-vo-steele-mexico-coastal-road-collapse.cnn",
+      "description" : "A Mexican coastal highway collapsed after the area was hit by a series of small earthquakes followed by heavy rain. ",
+      "headline" : "See damage in road collapse aftermath"
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131229063936-vo-russia-volgograd-blast-00001101-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/world/2013/12/29/vo-russia-volgograd-blast.russia-24",
+      "trt" : "45",
+      "id" : "world/2013/12/29/vo-russia-volgograd-blast.russia-24",
+      "description" : "In this video from Russia state media, you can see the blast going off at the core of the train station in Volgograd.",
+      "headline" : "See moment of train station blast"
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131229014046-lego-car-front-view-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/world/2013/12/29/nr-australia-lego-car.cnn",
+      "trt" : "63",
+      "id" : "world/2013/12/29/nr-australia-lego-car.cnn",
+      "description" : "The co-inventor of the Lego car hopes his project draws public attention to alternative ways to power engines.",
+      "headline" : "Life-size Lego car runs on air"
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131227063435-mxp-sot-miley-cyrus-adore-you-video-00002530-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/showbiz/2013/12/27/mxp-sot-miley-cyrus-adore-you-video.hln",
+      "trt" : "38",
+      "id" : "showbiz/2013/12/27/mxp-sot-miley-cyrus-adore-you-video.hln",
+      "description" : "Singer Miley Cyrus rolls around on bed sheets, touching herself in her new music video for \"Adore You.\"",
+      "headline" : "Cyrus video leaves little to imagination"
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131229144037-14-schumacher-1229-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/sports/2013/12/29/nr-sot-formula-one-racer-schumacher-hospitalized.cnn",
+      "trt" : "134",
+      "id" : "sports/2013/12/29/nr-sot-formula-one-racer-schumacher-hospitalized.cnn",
+      "description" : "Formula One racer Michael Schumacher was hospitalized after suffering \"severe head trauma\" in a skiing accident. ",
+      "headline" : "Racing 'legend' in critical condition"
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131229064932-russia-24-surveillance-search-tease.png",
+      "url" : "http://www.cnn.com/video/?/video/world/2013/12/29/idesk-magnay-bomb-blast-in-russia.cnn",
+      "trt" : "289",
+      "id" : "world/2013/12/29/idesk-magnay-bomb-blast-in-russia.cnn",
+      "description" : "CNN's Diana Magnay updates on the deadly bombing at a train station in Volgograd, Russia.",
+      "headline" : "Police: Suicide bomber triggered blast"
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131228190401-nr-vo-bizarre-robbery-cashier-gets-manager-00002809-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/crime/2013/12/28/nr-vo-bizarre-robbery-cashier-gets-manager.cnn",
+      "trt" : "37",
+      "id" : "crime/2013/12/28/nr-vo-bizarre-robbery-cashier-gets-manager.cnn",
+      "description" : "Police search for a robbery suspect after a bizarre exchange between a man and cashier was caught on camera. ",
+      "headline" : "Most bizarre robbery ever? "
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131229054128-stuck-ship-12-29-2013-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/world/2013/12/29/nr-tomkins-stranded-ship-updates.cnn",
+      "trt" : "150",
+      "id" : "world/2013/12/29/nr-tomkins-stranded-ship-updates.cnn",
+      "description" : "An Australian icebreaker is on its way to help a vessel and the 74 on board stranded in Antarctic waters.",
+      "headline" : "Trapped ship makes evacuation plans"
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131229042748-dnt-ma-supermodel-visits-cancer-patient-00000507-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/us/2013/12/29/dnt-ma-supermodel-visits-cancer-patient.whdh",
+      "trt" : "85",
+      "id" : "us/2013/12/29/dnt-ma-supermodel-visits-cancer-patient.whdh",
+      "description" : "Supermodel Gisele Bundchen surprised a young cancer patient with a visit, encouraging her to stay strong. WHDH reports.",
+      "headline" : "Supermodel visits cancer patient"
+   },
+   {
+      "thumbnail" : "http://i2.cdn.turner.com/cnn/dam/assets/131228105729-lion-king-puppy-gift-search-tease.jpg",
+      "url" : "http://www.cnn.com/video/?/video/bestoftv/2013/12/28/wxp-sot-puppy-gift-lion-king-style.hln",
+      "trt" : "47",
+      "id" : "bestoftv/2013/12/28/wxp-sot-puppy-gift-lion-king-style.hln",
+      "description" : "A group of siblings decided to present their parents' Christmas gift in a dramatic way.",
+      "headline" : "'Lion King' puppy spoof goes viral"
+   }
+]);

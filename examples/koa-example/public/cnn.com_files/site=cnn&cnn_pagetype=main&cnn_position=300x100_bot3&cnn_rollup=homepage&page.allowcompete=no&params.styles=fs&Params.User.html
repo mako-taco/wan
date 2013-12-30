@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0294)http://ads.cnn.com/html.ng/site=cnn&cnn_pagetype=main&cnn_position=300x100_bot3&cnn_rollup=homepage&page.allowcompete=no&params.styles=fs&Params.User.UserID=52a8942f0c38ba0a3c73c51d8001f584&transactionID=13883690946149050145439744&tile=7693909638843&domId=8fec2567758ceef5&kxid=nk3d4ql3o&kxseg= -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<script>
+        function cnnad_getTld (hostname)
+        {
+               var data = hostname.split(".");
+               if (data.length >= 2)
+               {
+                       return (data[data.length-2] + "." + data[data.length-1]);
+               }
+               return(null);
+        }
+ 
+        var cnnDocDomain = cnnad_getTld(location.hostname);
+        if(cnnDocDomain) {document.domain = cnnDocDomain;}
+
+	function cnnGetId(query) {
+		var keyValPairs = query.split('&');
+		if(!keyValPairs) {
+			keyValPairs = new Array();
+			keyValPairs[keyValPairs.length]=query;
+		}
+		for(var counter=0; counter < keyValPairs.length;counter++) {
+			var keyVal = keyValPairs[counter].split('=');
+			if(keyVal[0]=='domId') {
+				//alert("returning id: " + keyVal[1]);
+				return keyVal[1];
+			}
+		}
+	}
+			
+	function cnnSendData2() {
+		var docId = cnnGetId(decodeURIComponent(location.pathname.substring(9)));
+		var height = 100;
+		var width = 300;
+		var targetWindow = top;
+		try
+		{
+			if(parent.cnnad_showAd)
+			{
+				targetWindow = parent;
+			}
+		} catch(err) {} 
+		targetWindow.cnnad_showAd(docId);
+		if ((height > 0)&&(width > 0))
+		{
+			targetWindow.cnnad_setAdSize(docId,height,width);
+		}
+	}
+</script> 
+</head>
+
+<body style="background-color:transparent" onload="cnnSendData2()" marginwidth="0" marginheight="0">
+<!--FlightID: 509708-->
+<a target="_blank" href="http://ads.cnn.com/event.ng/Type=click&FlightID=509708&AdID=716638&TargetID=82548&Segments=730,2247,3285,4134,9496,9779,9781,9853,10381,16113,18517,18982,19419,21502,29793,30363,30550,30709,31777,32273,32594,32749,32822,33852,35605,36376,39416,40253,41850,46694,50742,51962,54251,54897,57125,58197,59467,62727,64019,64667,65113,65651,66311,66615,67029,69362,69469,70094,70329,71288,71531,72512,72858,72984,75013,75029,75030,75031,75035,75515,76122,76124,76353,77074,77483,77508,77689,78367,78545,78555,78650,79146,79686,80296,80422,80441,80488,80489,80491,80494,80496,80498,80516,80625,80857,80947,81041,81082,81185,81289,81320,81321,81347,81349,81350,81351,81377,81379,81386,81514,81516,81517,81518,81588,81698,81750,81762,82123,82366,82531&Targets=82806,82548,77028,187300,188142,189743&Values=61,77,80,101,150,917,1005,1285,1588,1701,1815,2677,2746,4450,19166,48213,49935,52897,56058,56872,57005,57006,58570,58702,59475,59986,61089,61263,63528,140532,153947,158387,158914,159052,159543,160031,160032&RawValues=NGUSERID%252C52a8942f0c38ba0a3c73c51d8001f584%252CKXID%252Cnk3d4ql3o%252CTID%252C13883690946149050145439744%252CTIL%252C7693909638843&Redirect=http://piersmorgan.blogs.cnn.com/"> <img src="23816Piers_Morgan_Live_300x100.jpg" width="300" height="100" border="0"></a><div style="position:absolute;visibility:hidden;"><img src="Type=count&ClientType=2&ASeg=&AMod=&AOpt=0&AdID=716638&FlightID=509708&TargetID=82548&SiteID=1588&EntityDefResetFlag=0&Segments=730,2247,3285,4134,9496,9779,9781,9853,10381,16113,18517,18982,19419,21502,29793,30363,.UserID=52a8942f0c38ba0a3c73c51d8001f584" width="1" height="1" border="0"></div>
+
+</body></html>

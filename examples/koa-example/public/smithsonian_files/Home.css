@@ -1,0 +1,93 @@
+.container_16 .grid_4 {width: 228px !important;} /*IK hack to make the round block class work w/ the grid* mainly applies to home page*/
+*+html .ie7grid16fix{margin-right:0px !important;}
+#breadcrumb,#share_this{display:none;}
+
+
+#home_slideshow{ overflow:hidden; height:310px; margin:10px 0;}
+/*overrides site.css slideshow settings*/
+.home_slideshow > div {
+background:url("/Content/Img/Home/home_slideshow_fade.png") repeat scroll left top transparent;
+height:293px;
+left:645px;
+padding:0.5em 1em 1em 1.5em;
+position:absolute;
+top:10px;
+width:265px;
+z-index:2;
+}
+#slideshow-navigation ul{font-size:1.0em;}
+.home_slideshow > div ul li{display:inline; padding-right:3px;}
+.home_slideshow > div ul li a {
+background:none repeat scroll 0 0 transparent;
+color:#8d8e8e;
+padding:3px;
+
+}
+.home_slideshow > div ul {
+display:block;
+float:none;
+margin-right:0;
+position:relative;
+margin-left:95px;
+}
+.home_slideshow>div ul li a.active {color:#ffffff; background:transparent; text-decoration:underline;} 
+.home_slideshow div.description{color:#fff;height:270px; margin-top:15px;}
+
+
+#callouts {padding-top:10px; padding-bottom:10px; height:230px;}
+div.grid_border{border-right:1px solid #c3c3c3; padding-right:10px;}
+div.grid_border.last{border-right:0px; padding-right:0px;padding-left:5px;}
+div.div_bottom{border-top:1px solid #c3c3c3; margin-top:10px; position:absolute; bottom:0; width:215px;}
+div.div_bottom_rel{border-top:1px solid #c3c3c3; position:relative; bottom:0px; width:215px;} /*goes with last column hacks. special cases here, people*/
+#home_main{min-height:430px;}
+#home_main{font-size:.9em; color:#676767;}
+#home_main div.grid_border{ min-height:380px;}
+#home_main h4{color:#393939; font-size:1.5em!important; font-family:georgia; }
+#home_main h4 a{color:#393939;}
+
+.border_bottom{border-bottom: 1px solid #c3c3c3;padding-bottom:10px;}
+
+#visiting{color:#393939;}
+#visiting ul {list-style:disc;color:#006CA8; padding-left:15px;line-height:1.5;}
+#visiting ul li a{color:#006CA8; font-weight:bold;}
+#visiting ul li a:hover{color:#676767;}
+
+#feature_events .twUpcomingDate{font-weight:normal !important;}
+#feature_events div#home_trumba_events_spud{height:380px; overflow:hidden;}
+
+.blog_post{margin-top:10px; color:#676767;}
+.blog_post .thumb{width:87px; padding-right:10px;}
+.blog_post .body{width:118px;}
+.blog_post .title{font-weight:bold;}
+.blog_post span{display:block;}
+
+.grid_4_last_column_tweak{width:225px; display:inline; float:left;}
+
+#magazine_connect{width:220px;} /*another hack*/
+
+
+/* CONNECT SOCIAL LINKS */
+
+#connect { 
+	padding-top: 5px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+}
+#connect ul li {
+	display: inline;
+}
+#connect img { height:40px; width:40px;}
+#connect a {
+	display: inline-block;
+}
+#youtube{top: -5px; position:relative; margin-right:10px;}
+#twitter{}
+#facebook{top:-8px; position:relative; margin-right:15px;}
+#blogz{}
+#podcasts{margin-right:10px;}
+.negative_top{position:relative; top:-5px;}
+
+#promos div:first-child{margin-right:2px;}
+#promos img{margin-left:3px;}
+#promos img.first{margin-left:0px;}
+#promos{margin:20px 0;}

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0293)http://ads.cnn.com/html.ng/site=cnn&cnn_pagetype=main&cnn_position=300x250_rgt&cnn_rollup=homepage&page.allowcompete=no&params.styles=fs&Params.User.UserID=52a8942f0c38ba0a3c73c51d8001f584&transactionID=13883690946149050145439744&tile=7693909638835&domId=6f4501668a5e9d58&kxid=nk3d4ql3o&kxseg= -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<script>
+        function cnnad_getTld (hostname)
+        {
+               var data = hostname.split(".");
+               if (data.length >= 2)
+               {
+                       return (data[data.length-2] + "." + data[data.length-1]);
+               }
+               return(null);
+        }
+ 
+        var cnnDocDomain = cnnad_getTld(location.hostname);
+        if(cnnDocDomain) {document.domain = cnnDocDomain;}
+
+	function cnnGetId(query) {
+		var keyValPairs = query.split('&');
+		if(!keyValPairs) {
+			keyValPairs = new Array();
+			keyValPairs[keyValPairs.length]=query;
+		}
+		for(var counter=0; counter < keyValPairs.length;counter++) {
+			var keyVal = keyValPairs[counter].split('=');
+			if(keyVal[0]=='domId') {
+				//alert("returning id: " + keyVal[1]);
+				return keyVal[1];
+			}
+		}
+	}
+			
+	function cnnSendData2() {
+		var docId = cnnGetId(decodeURIComponent(location.pathname.substring(9)));
+		var height = 250;
+		var width = 300;
+		var targetWindow = top;
+		try
+		{
+			if(parent.cnnad_showAd)
+			{
+				targetWindow = parent;
+			}
+		} catch(err) {} 
+		targetWindow.cnnad_showAd(docId);
+		if ((height > 0)&&(width > 0))
+		{
+			targetWindow.cnnad_setAdSize(docId,height,width);
+		}
+	}
+</script> 
+</head>
+
+<body style="background-color:transparent" onload="cnnSendData2()" marginwidth="0" marginheight="0">
+<!--FlightID: 514985-->
+<iframe src="Type=click&FlightID=514985&AdID=696714&TargetID=190506&Values=1588&Redirect=.html" width="300" height="250" marginwidth="0" marginheight="0" hspace="0" vspace="0" frameborder="0" scrolling="no" bordercolor="#000000">
+&lt;SCRIPT language='JavaScript1.1' SRC="http://ad.doubleclick.net/adj/N4492.149036.TURNERSPORTSANDENTE/B7212070.3;abr=!ie;sz=300x250;pc=[TPAS_ID];click0=http://ads.cnn.com/event.ng/Type=click&amp;FlightID=514985&amp;AdID=696714&amp;TargetID=190506&amp;Values=1588&amp;Redirect=;ord=bAkNnxe,bjmbvggfjjAqx?"&gt;
+&lt;/SCRIPT&gt;
+</iframe>
+<!-- 26234 -->
+<div style="position:absolute;visibility:hidden;"><img src="Type=count&ClientType=2&ASeg=&AMod=&AOpt=0&AdID=696714&FlightID=514985&TargetID=190506&SiteID=1588&EntityDefResetFlag=0&Segments=DECBHHicHZLJFQBBBEQTcrAv-SfWVX3542Eo9ISKe46Eb0lapFxey80csCa3FWIaMC1053PJU7E2Q3TL4N9ldE.UserID=52a8942f0c38ba0a3c73c51d8001f584" width="1" height="1" border="0"></div>
+
+</body></html>

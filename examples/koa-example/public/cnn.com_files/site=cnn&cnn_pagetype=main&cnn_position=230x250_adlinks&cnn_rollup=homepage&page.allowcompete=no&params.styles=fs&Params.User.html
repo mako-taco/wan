@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0297)http://ads.cnn.com/html.ng/site=cnn&cnn_pagetype=main&cnn_position=230x250_adlinks&cnn_rollup=homepage&page.allowcompete=no&params.styles=fs&Params.User.UserID=52a8942f0c38ba0a3c73c51d8001f584&transactionID=13883690946149050145439744&tile=7693909638831&domId=4bda3cbe1f063471&kxid=nk3d4ql3o&kxseg= -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<script>
+        function cnnad_getTld (hostname)
+        {
+               var data = hostname.split(".");
+               if (data.length >= 2)
+               {
+                       return (data[data.length-2] + "." + data[data.length-1]);
+               }
+               return(null);
+        }
+ 
+        var cnnDocDomain = cnnad_getTld(location.hostname);
+        if(cnnDocDomain) {document.domain = cnnDocDomain;}
+
+	function cnnGetId(query) {
+		var keyValPairs = query.split('&');
+		if(!keyValPairs) {
+			keyValPairs = new Array();
+			keyValPairs[keyValPairs.length]=query;
+		}
+		for(var counter=0; counter < keyValPairs.length;counter++) {
+			var keyVal = keyValPairs[counter].split('=');
+			if(keyVal[0]=='domId') {
+				//alert("returning id: " + keyVal[1]);
+				return keyVal[1];
+			}
+		}
+	}
+			
+	function cnnSendData2() {
+		var docId = cnnGetId(decodeURIComponent(location.pathname.substring(9)));
+		var height = 200;
+		var width = 217;
+		var targetWindow = top;
+		try
+		{
+			if(parent.cnnad_showAd)
+			{
+				targetWindow = parent;
+			}
+		} catch(err) {} 
+		targetWindow.cnnad_showAd(docId);
+		if ((height > 0)&&(width > 0))
+		{
+			targetWindow.cnnad_setAdSize(docId,height,width);
+		}
+	}
+</script> 
+</head>
+
+<body style="background-color:transparent" onload="cnnSendData2()" marginwidth="0" marginheight="0">
+<!--FlightID: 517892-->
+<script type="text/javascript">adsonar_placementId=1579826;adsonar_pid=1980767;adsonar_ps=36252241;adsonar_zw=217;adsonar_zh=200;adsonar_jv='ads.adsonar.com';</script><script language="JavaScript" src="adsonar.js"></script><iframe name="adsonar_serve114682" id="adsonar_serve114682" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" width="217" height="200" src="getAds.html"></iframe>
+<div style="position:absolute;visibility:hidden;"><img src="Type=count&ClientType=2&ASeg=&AMod=&AOpt=0&AdID=723118&FlightID=517892&TargetID=75806&SiteID=1588&EntityDefResetFlag=0&Segments=730,2247,3285,4134,9496,9779,9781,9853,10381,16113,18517,18982,19419,21502,29793,30550,.UserID=52a8942f0c38ba0a3c73c51d8001f584" width="1" height="1" border="0"></div>
+
+</body></html>

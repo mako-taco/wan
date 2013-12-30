@@ -1,0 +1,25 @@
+@import url("Reset.css");
+@import url("960.css");
+@import url("Site.css");
+body {margin: 0; padding: 0; background-color:#fff; overflow-y: visible;}
+
+#main_nav,#topbar,#toplinks,#share_this{display:none;}
+
+#main a, #main a:visited{text-decoration: underline; color:#06c;}
+
+/*#main a:link:after, #main a:visited:after {
+   content: " (" attr(href) ") ";
+   font-size: 80%;
+}
+#main a[href^="/"]:after {
+  content: " (http://www.si.edu" attr(href) ") ";
+}
+*/
+#main {
+   width: auto;
+   padding: 0;
+   border: 0;
+   float: none !important;
+   background: transparent none;
+   overflow-y: visible;
+}

@@ -1,0 +1,79 @@
+﻿/*General font and other styles*/
+@font-face {
+    font-family: 'BebasNeueRegular';
+    src: url('/content/fonts/BebasNeue-webfont.eot');
+    src: url('/content/fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/content/fonts/BebasNeue-webfont.woff') format('woff'),
+         url('/content/fonts/BebasNeue-webfont.ttf') format('truetype'),
+         url('/content/fonts/BebasNeue-webfont.svg#BebasNeueRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;}
+    
+.best {font-family: 'Open Sans', sans-serif;}
+   
+.bebas {font-family: BebasNeueRegular, Verdana, Sans-Serif;}
+.impact {font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', Futura-CondensedExtraBold, sans-serif ;}
+.trebuchet {font-family: 'trebuchet MS', helvetica, sans-serif;}
+.tahoma {font-family: Tahoma, Geneva, sans-serif;}
+.arial {font-family: Arial, Helvetica, sans-serif;}
+.gothic {font-family: Century Gothic, sans-serif;}
+.rounded {font-family:"Arial Rounded MT Bold", Arial, Helvetica, sans-serif;}
+
+.slideshow_desc {text-align:center; display:none;}
+.slideshow_desc p{padding:0 0 1em 0;}
+.slideshow_desc .ten{font-size:1em;}
+.slideshow_desc .twelve{font-size:1.1em;}
+.slideshow_desc .fourteen{font-size:1.3em;}
+.slideshow_desc .sixteen{font-size:1.4em;}
+.slideshow_desc .eighteen{font-size:1.6em;}
+.slideshow_desc .twenty{font-size:2.0em;}
+.slideshow_desc .twentytwo{font-size:2.2em;}
+.slideshow_desc .twentyfive{font-size:2.4em;}
+.slideshow_desc .thirty{font-size:2.9em;}
+.slideshow_desc .thirtyfive{font-size:3.1em;}
+.slideshow_desc .fourty{font-size:4em;}
+
+
+.slideshow_desc .wide_spacing{letter-spacing:2.5px;}
+.slideshow_desc .no_pad{padding:0;}
+
+.slideshow_desc img{margin:5px 0;}
+.slideshow_desc .body_copy{line-height:1.6em;}
+
+/*.slideshow_desc .blue{color:#86adbc;}*/
+.slideshow_desc .blue{color:#daf4ff;}
+.slideshow_desc .paleyellow{color:#f9ce71;}
+.slideshow_desc .periwinkle{color:#6daaeb;}
+.slideshow_desc .brightblue{color:#08dcfe;}
+.slideshow_desc .brandblue{color:#0fd6ff;}
+.slideshow_desc .brandaqua{color:#77f7bf;}
+.slideshow_desc .brightyellow{color:#f6e434;} 
+.slideshow_desc .scienceyellow{color:#fac823;}
+.slideshow_desc .red{color:#e8202d;}
+.slideshow_desc .turquoise{color:#7dcfe1;}
+.slideshow_desc .purple{color:#aea7eb;}
+.slideshow_desc .white{color:#fff;}
+.slideshow_desc .orange{color:#f3cb83;}
+.slideshow_desc .redorange{color:#fc5c24;}
+.slideshow_desc .brightorange{color:#ffcb00;}
+.slideshow_desc .green{color:#afbd75;}
+.slideshow_desc .brightgreen{color:#5ae632;}
+.slideshow_desc .palegreen{color:#daefbb;}
+.slideshow_desc .beige{color:#fcf9ce;}
+.slideshow_desc .yellow{color:#f9fb6a;}
+.slideshow_desc .lemonyellow{color:#eff634;}
+.slideshow_desc .gold{color:#feb43b;}
+.slideshow_desc .lavender{color:#fb5ef9;}
+.slideshow_desc .pink{color:#fecde2;}
+.slideshow_desc .medorange{color:#d97731;}
+
+
+
+div.space{height:10px;}
+div.space20{height:20px;}
+
+/*slideshow image divs for styling
+#slideshow_desc h4{font-size:2.2em; color:#fff;}
+#slideshow_desc p{padding-bottom:5px;}
+.slideshow_desc h4{padding-bottom:24px;}
+*/

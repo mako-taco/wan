@@ -1,0 +1,65 @@
+parseNowPlayingJSON_nowplaying_1_0_2({
+   "channel" : [
+      {
+         "provider" : "cnn.com",
+         "feeds" : {
+            "cell_iOSFileSelection" : {
+               "iphone" : "iPhoneCell_CNN",
+               "ipad" : "iPadCell_CNN"
+            },
+            "wifi_iOSFileSelection" : {
+               "iphone" : "iPhoneWIFI_CNN",
+               "ipad" : "iPadWIFI_CNN"
+            }
+         },
+         "time" : "9pm ET / 6pm PT",
+         "copyright" : "2011 Cable News Network. All Rights Reserved.",
+         "containerXML" : "http://www.cnn.com/.element/apps/cvp/ios/cfg/container.xml",
+         "program" : "Inside Man: Marijuana",
+         "timestamp" : "20131229T210402-0500",
+         "configXML" : "http://www.cnn.com/.element/apps/cvp/ios/cfg/config.xml",
+         "id" : "CNN",
+         "channelImage" : "http://i.cdn.turner.com/cnn/.element/img/3.0/sect/tv/cnn_logo_64x36.png",
+         "images" : {
+            "120x68" : "http://i.cdn.turner.com/cnn/2013/images/04/03/ontv/spurlock_tve-300x169-mb-2.jpg"
+         },
+         "minIOSVersion" : "3.2",
+         "description" : "Hosted and produced by documentary filmmaker Morgan Spurlock.",
+         "videoXML" : "cvptve/iosstream1",
+         "episodeLength" : 3600,
+         "channelClassification" : "News"
+      },
+      {
+         "provider" : "HLNtv.com",
+         "feeds" : {
+            "cell_iOSFileSelection" : {
+               "iphone" : "iPhoneCell_HLN",
+               "ipad" : "iPadCell_HLN"
+            },
+            "wifi_iOSFileSelection" : {
+               "iphone" : "iPhoneWIFI_HLN",
+               "ipad" : "iPadWIFI_HLN"
+            }
+         },
+         "time" : "3pm ET / 12pm PT",
+         "copyright" : "2011 Cable News Network. All Rights Reserved.",
+         "containerXML" : "http://www.cnn.com/.element/apps/cvp/ios/cfg/container.xml",
+         "program" : "HLN Mysteries",
+         "timestamp" : "20131229T210402-0500",
+         "configXML" : "http://www.cnn.com/.element/apps/cvp/ios/cfg/config.xml",
+         "id" : "HLN",
+         "channelImage" : "http://i.cdn.turner.com/cnn/.element/img/3.0/sect/tv/hln_logo_64x36.png",
+         "images" : {
+            "120x68" : "http://i.cdn.turner.com/cnn/2012/images/01/02/weekendmys_188x106.jpg"
+         },
+         "minIOSVersion" : "3.2",
+         "description" : "Programming block dedicated to real-life justice stories.",
+         "videoXML" : "cvptve/iosstream2",
+         "episodeLength" : 32400,
+         "channelClassification" : "News"
+      }
+   ]
+}
+
+
+);
