@@ -1,4 +1,4 @@
-#Wan
+#Wan for Node.js
 The goal of Wan is to reduce http overhead by cutting requests to static resources,
 without requiring you to make any significant changes to your current sites. Wan will radically affect
 your site's request footprint. Click to see a [video side-by-side comparisson](http://www.youtube.com/watch?v=yZwwAi0MHzE&feature=youtu.be) of a website with and without `wan`.
@@ -15,6 +15,12 @@ a sprite-sheet.
 
 Wan is a two part library, containing a single file for the client, and a node module for the
 server, available currently as a piece of Koa middleware.
+
+##Installing
+Wan is available for node.js via npm
+```
+npm install wan
+```
 
 ##Creating Wan on the client
 ```javascript
