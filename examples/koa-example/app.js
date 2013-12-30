@@ -11,5 +11,4 @@ app.use(wan({
 }));
 app.use(serve('public', {maxage: 10000}));
 app.use(serve('../../client'));
-
 app.listen(3000);

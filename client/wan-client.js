@@ -137,17 +137,19 @@ Wan.getImages = function () {
 					for(var i=0, l=parts.length-1; i<l; i++) {
 						
 						part = parts[i]
+						var index = part.indexOf(';');
+						var dataURI = 'data:' + part.substring(0,index) + ';charset=utf-8;base64,' + part.substring(index + 1);
 						var imgList = imgArray[imagesDone++];
 						for(var j=0, ll=imgList.length; j<ll; j++) {
-							imgList[j].src = part;
+							imgList[j].src = dataURI;
 						}
 
 						if(memCache) {
-							Wan.memCache[Wan.getCacheKey(img)] = part;
+							Wan.memCache[Wan.getCacheKey(img)] = dataURI;
 						}
 
 						if(diskCache) {
-							localStorage.setItem(Wan.getCacheKey(img), part);
+							localStorage.setItem(Wan.getCacheKey(img), dataURI);
 						}
 
 						img.removeAttribute('data-src');
