@@ -1,14 +1,16 @@
 #Wan
 The goal of Wan is to reduce http overhead by cutting requests to static resources,
-without requiring you to make any significant changes to your current sites. Currently,
-the only feature implemented is *data URI spriting*, which lets you stream all of your 
+without requiring you to make any significant changes to your current sites. Wan will radically affect
+your site's request footprint.
+
+####Before: 
+![99 Requests, 1.5MB, load: 17.45s](https://s3.amazonaws.com/wan.js/before.png "without Wan")
+####After: 
+![62 Requests, 1.4MB, load: 14.47s](https://s3.amazonaws.com/wan.js/after.png "with Wan")
+
+Currently, the only feature implemented is *data URI spriting*, which lets you stream all of your 
 site's static images to a client in a single HTTP request, without having to maintain
 a sprite-sheet.
-
-###Before Wan
-![without Wan](https://s3.amazonaws.com/wan.js/a.png "without Wan")
-###After Wan
-![with Wan](https://s3.amazonaws.com/wan.js/b.png "with Wan")
 
 Wan is a two part library, containing a single file for the client, and a node module for the
 server, available currently as a piece of Koa middleware.
