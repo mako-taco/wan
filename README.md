@@ -41,10 +41,10 @@ added to the request, and have its `src` set to a data URI as soon as it has bee
 The response is chunked and evaluated on every progress update in order to display images as soon as
 possible, without needing to wait for the response to finish.
 ```html
-<img data-src="o.png" width="20" height="100"></img>
-<img data-src="m.png" width="20" height="100"></img>
-<img src="f.png" width="20" height="100"></img>
-<img data-src="g.png" width="20" height="100"></img>
+<img data-src="o.png" width="20" height="100">
+<img data-src="m.png" width="20" height="100">
+<img src="f.png" width="20" height="100">
+<img data-src="g.png" width="20" height="100">
 
 <script src="wan-client.js"></script>
 <script>
@@ -71,16 +71,16 @@ their order in the DOM is compared, loading images that appear higher in the DOM
 
 ```html
 <!-- Loads second-->
-<img data-src="o.png" width="20" height="100" priority="3"></img>
+<img data-src="o.png" width="20" height="100" priority="3">
 
 <!-- Loads last (no priority given) -->
-<img data-src="m.png" width="20" height="100"></img>
+<img data-src="m.png" width="20" height="100">
 
 <!-- Loads third -->
-<img data-src="f.png" width="20" height="100" priority="3"></img>
+<img data-src="f.png" width="20" height="100" priority="3">
 
 <!-- Loads first -->
-<img data-src="g.png" width="20" height="100" priority="1"></img>
+<img data-src="g.png" width="20" height="100" priority="1">
 ```
 
 ##Creating Wan on the server
