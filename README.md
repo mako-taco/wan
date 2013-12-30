@@ -8,7 +8,7 @@ a sprite-sheet.
 ###Before Wan
 ![without Wan](https://s3.amazonaws.com/wan.js/b.png "without Wan")
 ###After Wan
-![with Wan](https://s3.amazonaws.com/wan.js/b.png "with Wan")
+![with Wan](https://s3.amazonaws.com/wan.js/a.png "with Wan")
 
 Wan is a two part library, containing a single file for the client, and a node module for the
 server, available currently as a piece of Koa middleware.
