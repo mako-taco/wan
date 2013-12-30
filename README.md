@@ -5,13 +5,18 @@ the only feature implemented is *data URI spriting*, which lets you stream all o
 site's static images to a client in a single HTTP request, without having to maintain
 a sprite-sheet.
 
+###Before Wan
+![without Wan](https://s3.amazonaws.com/wan.js/b.png "without Wan")
+###After Wan
+![with Wan](https://s3.amazonaws.com/wan.js/b.png "with Wan")
+
 Wan is a two part library, containing a single file for the client, and a node module for the
 server, available currently as a piece of Koa middleware.
 
 You can see a side-by-side comparisson of a website with and without `wan` [here](http://www.youtube.com/watch?v=yZwwAi0MHzE&feature=youtu.be).
 
 ##Creating Wan on the client
-```
+```javascript
 var wan = new Wan(options)
 ```
 Where options may contain any of the following:
@@ -27,7 +32,7 @@ Every `img` tag in the DOM when `getImages` is called that has a `data-src` attr
 added to the request, and have its `src` set to a data URI as soon as it has been send to the client.
 The response is chunked and evaluated on every progress update in order to display images as soon as
 possible, without needing to wait for the response to finish.
-```
+```javascript
 <img data-src="o.png" width="20" height="100"></img>
 <img data-src="m.png" width="20" height="100"></img>
 <img src="f.png" width="20" height="100"></img>
@@ -52,7 +57,7 @@ in local storage that will serve to invalidate the Local Storage cache appropria
 
 ##Creating Wan on the server
 Requiring `'wan/koa'` will give you middleware that you can use with Koa.  Requiring `'wan/express` will give you express middleware. 
-```
+```javascript
 var wan = require('wan/koa');
 app.use(wan(options));
 ```
