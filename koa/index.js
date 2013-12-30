@@ -8,7 +8,7 @@ var Wan = require('../lib/wan'),
 
 module.exports = function (opts) {
 	assertions(opts);
-	var wan = Wan(opts);
+	var wan = new Wan(opts);
 	return function * middleware(next) {
 		if(opts.route === this.path) {
 			var passthrough = new stream.PassThrough();
@@ -18,7 +18,7 @@ module.exports = function (opts) {
 			this.set('Cache-control', 'public, max-age=6000');
 			this.set('X-Accel-Buffering', 'no');
 			this.body = passthrough;
-			
+
 			wan.handler(this.req, passthrough, this.query, function (status) {
 				this.status = status;
 			}.bind(this));

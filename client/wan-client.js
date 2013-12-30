@@ -2,6 +2,7 @@ function Wan (opts) {
 	var opts = opts || {};
 
 	Wan.options = {
+		expirationKey: "wan-expires",
 		cachePrefix: "wan-cache-",
 		diskCache: true,
 		memCache: true,
@@ -10,15 +11,25 @@ function Wan (opts) {
 
 	Wan.memCache = {};
 
+	Wan.cacheExpired = false;
+
 	for(i in Wan.options) {
 		if(opts[i] !== undefined) {
 			Wan.options[i] = opts[i];
 		}
 	}
 
-	if(Wan.options.diskCache && !window.localStorage) {
-		Wan.options.diskCache = false;
-		console.warn("Local storage not supported -- setting diskCache to false")
+	if(Wan.options.diskCache) {
+		if(!window.localStorage) {
+			Wan.options.diskCache = false;
+			console.warn("Local storage not supported -- setting diskCache to false")
+		}
+		else {
+			var expires = localStorage.getItem(Wan.expirationKey);
+			if(expires && ~~expires < Date.now()) {
+				Wan.cacheExpired = true;
+			}
+		}
 	}
 
 	return Wan;
@@ -28,6 +39,7 @@ Wan.getImages = function () {
 	var imgs = document.getElementsByTagName('img')
 	,	diskCache = Wan.options.diskCache
 	,	memCache = Wan.options.memCache
+	,	cacheExpired = Wan.cacheExpired
 	,	parserIndex = 0		//how far into the responseText we have parsed
 	,	imagesDone = 0		//number of completed image loads
 	, 	query = []			//builds the querystring
@@ -54,7 +66,7 @@ Wan.getImages = function () {
 			}
 
 			//Check local storage cache
-			if(diskCache) {
+			if(diskCache && !cacheExpired) {
 				var cacheHit = localStorage.getItem(Wan.getCacheKey(img))
 				if(cacheHit) {
 					img.src = cacheHit;
@@ -98,6 +110,24 @@ Wan.getImages = function () {
 
 		xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function () {
+			if(xhr.readyState == 2) {
+				var cacheControl = xhr.getResponseHeader('Cache-Control');
+				var maxAge = cacheControl.match(/max\-age\=(\d+)/i)[1];
+				var expiration;
+				if(maxAge) {
+					expiration = Date.now() + (~~maxAge) * 1000
+				}
+				else {
+					var expires = xhr.getResponseHeader('Expires');
+					if(expires) {
+						expiration = (new Date(expires)).getTime();
+					}
+				}
+
+				if(expiration) {
+					localStorage.setItem(Wan.expirationKey, expiration);
+				}
+			}
 			if(xhr.readyState == 3) {
 				var relevant = xhr.responseText.substring(parserIndex)
 				,	parts = relevant.split('\n')
@@ -134,9 +164,22 @@ Wan.getImages = function () {
 		};
 		
 		if(query.length > 0) {
-			xhr.open("GET", Wan.options.route + "?" + query.join('&'));
-			xhr.setRequestHeader('Cache-Control','max-age=86400');
-			xhr.send();
+			var qs = "?" + query.join('&');
+			var longURL = Wan.options.route + qs;
+			if(longURL.length > 2000) {
+				//Send with the request body instead
+				var body = "";
+				for (var i=0, l=imgArray.length-1; i<l; i++) {
+					body += imgArray[i].src + "&";
+				};
+				body += imgArray[imgArray.length-1].src;
+				xhr.open("POST", Wan.options.route);
+				xhr.send(body);
+			}
+			else {
+				xhr.open("GET", longURL);
+				xhr.send();
+			}
 		}
 	}
 }

@@ -52,6 +52,41 @@ describe("[Express]", function () {
 			})
 		})
 	})
+
+	describe("POST", function () {
+		describe("with a path matching wan's", function () {
+			describe("and no query string", function () {
+				it("should respond with a 400", function (done) {
+					request(app.listen())
+					.post('/wan')
+					.expect(400)
+					.expect("No images to load", done);
+				})
+			})
+
+			describe("with a query string", function () {
+				describe("containing all valid file paths", function () {
+					it("should stream back data URIs for each file", function (done) {
+						request(app.listen())
+						.post('/wan')
+						.send('icon0.png&icon1.png')
+						.expect(200)
+						.expect(fs.readFileSync('test/fixtures/good', {encoding: 'utf8'}), done);
+					})
+				})
+
+				describe("containing a bad file path", function () {
+					it("should stream back data URIs for each file, excluding the bad file", function (done) {
+						request(app.listen())
+						.post('/wan')
+						.send('icon0.png&iconBAD.png&icon1.png')
+						.expect(200)
+						.expect(fs.readFileSync('test/fixtures/bad', {encoding: 'utf8'}), done);
+					})
+				})
+			})
+		})
+	})
 });
 
 describe("[Koa]", function () {
@@ -104,6 +139,41 @@ describe("[Koa]", function () {
 				.get('/test.html')
 				.expect(200)
 				.expect("Hello", done);
+			})
+		})
+	})
+
+	describe("POST", function () {
+		describe("with a path matching wan's", function () {
+			describe("and no query string", function () {
+				it("should respond with a 400", function (done) {
+					request(app.listen())
+					.post('/wan')
+					.expect(400)
+					.expect("No images to load", done);
+				})
+			})
+
+			describe("with a query string", function () {
+				describe("containing all valid file paths", function () {
+					it("should stream back data URIs for each file", function (done) {
+						request(app.listen())
+						.post('/wan')
+						.send('icon0.png&icon1.png')
+						.expect(200)
+						.expect(fs.readFileSync('test/fixtures/good', {encoding: 'utf8'}), done);
+					})
+				})
+
+				describe("containing a bad file path", function () {
+					it("should stream back data URIs for each file, excluding the bad file", function (done) {
+						request(app.listen())
+						.post('/wan')
+						.send('icon0.png&iconBAD.png&icon1.png')
+						.expect(200)
+						.expect(fs.readFileSync('test/fixtures/bad', {encoding: 'utf8'}), done);
+					})
+				})
 			})
 		})
 	})

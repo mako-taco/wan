@@ -3,7 +3,7 @@ var Wan = require('../lib/wan'),
 
 module.exports = function (opts) {
 	assertions(opts);
-	var wan = Wan(opts);
+	var wan = new Wan(opts);
 
 	return function (req, res, next) {
 		if(opts.route === req.path) {
