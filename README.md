@@ -1,11 +1,12 @@
 #Wan
 The goal of Wan is to reduce http overhead by cutting requests to static resources,
 without requiring you to make any significant changes to your current sites. Wan will radically affect
-your site's request footprint.
+your site's request footprint. Click to see a [video side-by-side comparisson](http://www.youtube.com/watch?v=yZwwAi0MHzE&feature=youtu.be) of a website with and without `wan`.
 
-####Before: 
+[![99 Requests, 1.5MB, load: 17.45s](https://s3.amazonaws.com/wan.js/youtube.png "without Wan")](http://www.youtube.com/watch?v=yZwwAi0MHzE&feature=youtu.be)
+
+####Before & After:
 ![99 Requests, 1.5MB, load: 17.45s](https://s3.amazonaws.com/wan.js/before.png "without Wan")
-####After: 
 ![62 Requests, 1.4MB, load: 14.47s](https://s3.amazonaws.com/wan.js/after.png "with Wan")
 
 Currently, the only feature implemented is *data URI spriting*, which lets you stream all of your 
@@ -14,8 +15,6 @@ a sprite-sheet.
 
 Wan is a two part library, containing a single file for the client, and a node module for the
 server, available currently as a piece of Koa middleware.
-
-You can see a side-by-side comparisson of a website with and without `wan` [here](http://www.youtube.com/watch?v=yZwwAi0MHzE&feature=youtu.be).
 
 ##Creating Wan on the client
 ```javascript
