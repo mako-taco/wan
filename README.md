@@ -6,9 +6,9 @@ site's static images to a client in a single HTTP request, without having to mai
 a sprite-sheet.
 
 ###Before Wan
-![without Wan](https://s3.amazonaws.com/wan.js/b.png "without Wan")
+![without Wan](https://s3.amazonaws.com/wan.js/a.png "without Wan")
 ###After Wan
-![with Wan](https://s3.amazonaws.com/wan.js/a.png "with Wan")
+![with Wan](https://s3.amazonaws.com/wan.js/b.png "with Wan")
 
 Wan is a two part library, containing a single file for the client, and a node module for the
 server, available currently as a piece of Koa middleware.
