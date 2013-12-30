@@ -7,6 +7,7 @@ your site's request footprint. Click to see a [video side-by-side comparisson](h
 
 ####Before & After:
 ![99 Requests, 1.5MB, load: 17.45s](https://s3.amazonaws.com/wan.js/before.png "without Wan")
+
 ![62 Requests, 1.4MB, load: 14.47s](https://s3.amazonaws.com/wan.js/after.png "with Wan")
 
 Currently, the only feature implemented is *data URI spriting*, which lets you stream all of your 
