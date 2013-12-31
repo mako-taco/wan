@@ -15,7 +15,7 @@ site's static images to a client in a single HTTP request, without having to mai
 a sprite-sheet.
 
 Wan is a two part library, containing a single file for the client, and a node module for the
-server, available currently as a piece of Koa middleware.
+server, available currently as a piece of Koa or Express middleware.
 
 ##Installing
 Wan is available for node.js via npm
