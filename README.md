@@ -23,10 +23,18 @@ Wan is available for node.js via npm
 npm install wan
 ```
 
-##Creating Wan on the client
+##Using Wan on the client
+The client library exposes a single function, `Wan`, which you use to set options. You call `Wan.getImages()`
+to request the image stream from your server.
 ```javascript
-var wan = new Wan(options)
+Wan(options);		//returns Wan again
+Wan.getImages();
 ```
+**or**
+```javascript
+Wan(options).getImages();
+```
+
 Where options may contain any of the following:
  - `memCache` (default `true`): Enables caching requests in memory on the client side
  - `diskCache` (default `true`): Enables persistent caching in Local Storage
