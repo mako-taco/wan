@@ -25,7 +25,7 @@ function Wan (opts) {
 			console.warn("Local storage not supported -- setting diskCache to false")
 		}
 		else {
-			var expires = localStorage.getItem(Wan.expirationKey);
+			var expires = localStorage.getItem(Wan.options.expirationKey);
 			if(expires && ~~expires < Date.now()) {
 				Wan.cacheExpired = true;
 			}
@@ -67,7 +67,7 @@ Wan.getImages = function () {
 
 			//Check local storage cache
 			if(diskCache && !cacheExpired) {
-				var cacheHit = localStorage.getItem(Wan.getCacheKey(img))
+				var cacheHit = localStorage.getItem(Wan.options.cachePrefix + src)
 				if(cacheHit) {
 					img.src = cacheHit;
 					if(Wan.options.memCache) {
@@ -91,6 +91,8 @@ Wan.getImages = function () {
 			if(priority && (priority < desc.priority)) {
 				desc.priority = priority;
 			}
+
+
 		}
 	};
 
@@ -125,7 +127,7 @@ Wan.getImages = function () {
 				}
 
 				if(expiration) {
-					localStorage.setItem(Wan.expirationKey, expiration);
+					localStorage.setItem(Wan.options.expirationKey, expiration);
 				}
 			}
 			if(xhr.readyState == 3) {
@@ -145,14 +147,13 @@ Wan.getImages = function () {
 						}
 
 						if(memCache) {
-							Wan.memCache[Wan.getCacheKey(img)] = dataURI;
+							Wan.memCache[imgList.src] = dataURI;
 						}
 
 						if(diskCache) {
-							localStorage.setItem(Wan.getCacheKey(img), dataURI);
+							localStorage.setItem(Wan.options.cachePrefix + imgList.src, dataURI);
 						}
 
-						img.removeAttribute('data-src');
 						parserIndex += parts[i].length + 1; //account for newline which was consumed in split
 					}
 				}
