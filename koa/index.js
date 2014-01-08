@@ -12,7 +12,6 @@ module.exports = function (opts) {
 	return function * middleware(next) {
 		if(opts.route === this.path) {
 			var passthrough = new stream.PassThrough();
-			this.set('Connection', 'keep-alive');
 			this.set('Transfer-Encoding', 'chunked');
 			this.set('Content-type', 'text/html; charset=utf-8');
 			

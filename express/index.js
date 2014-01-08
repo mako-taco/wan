@@ -7,14 +7,13 @@ module.exports = function (opts) {
 
 	return function (req, res, next) {
 		if(opts.route === req.path) {
-			res.setHeader('Connection', 'keep-alive');
 			res.setHeader('Transfer-Encoding', 'chunked');
 			res.setHeader('Content-type', 'text/html; charset=utf-8');
 			
 			if(opts.cacheControl) {
 				res.setHeader('Cache-control', opts.cacheControl);
 			}
-			
+
 			res.setHeader('X-Accel-Buffering', 'no');
 			wan.handler(req, res, req.query, function (status) {
 				res.statusCode = status;
