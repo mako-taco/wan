@@ -7,7 +7,8 @@ var wan = require('../../koa');
 app.use(compress());
 app.use(wan({
 	route: '/wan', 
-	location: 'public'
+	location: 'public',
+	cacheControl: 'public, max-age=60'
 }));
 app.use(serve('public', {maxage: 10000}));
 app.use(serve('../../client'));

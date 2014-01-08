@@ -1,6 +1,8 @@
 function Wan (opts) {
 	var opts = opts || {};
 
+	Wan.initialized = true;
+
 	Wan.options = {
 		expirationKey: "wan-expires",
 		cachePrefix: "wan-cache-",
@@ -25,8 +27,8 @@ function Wan (opts) {
 			console.warn("Local storage not supported -- setting diskCache to false")
 		}
 		else {
-			var expires = localStorage.getItem(Wan.options.expirationKey);
-			if(expires && ~~expires < Date.now()) {
+			var expires = parseInt(localStorage.getItem(Wan.options.expirationKey));
+			if(isNaN(expires) || expires - Date.now() < 0) {
 				Wan.cacheExpired = true;
 			}
 		}
@@ -36,6 +38,10 @@ function Wan (opts) {
 }
 
 Wan.getImages = function () {
+	if(!Wan.initialized) {
+		Wan();
+	}
+
 	var imgs = document.getElementsByTagName('img')
 	,	diskCache = Wan.options.diskCache
 	,	memCache = Wan.options.memCache

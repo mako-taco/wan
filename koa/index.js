@@ -15,7 +15,11 @@ module.exports = function (opts) {
 			this.set('Connection', 'keep-alive');
 			this.set('Transfer-Encoding', 'chunked');
 			this.set('Content-type', 'text/html; charset=utf-8');
-			this.set('Cache-control', 'public, max-age=6000');
+			
+			if(opts.cacheControl) {
+				this.set('Cache-control', opts.cacheControl);
+			}
+			
 			this.set('X-Accel-Buffering', 'no');
 			this.body = passthrough;
 
