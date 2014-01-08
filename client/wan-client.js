@@ -59,6 +59,7 @@ Wan.getImages = function () {
 	for (var i=0, l=imgs.length; i<l; i++) {
 		img = imgs[i];
 		src = img.getAttribute('data-src');
+		img.removeAttribute('data-src');
 		priority = ~~img.getAttribute('priority');
 
 		if(src) {
