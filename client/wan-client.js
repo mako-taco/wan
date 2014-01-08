@@ -56,6 +56,7 @@ Wan.getImages = function () {
 		priority = ~~img.getAttribute('priority');
 
 		if(src) {
+			img.removeAttribute('data-src');		
 			//Check mem cache
 			if(memCache) {
 				var cacheHit = Wan.memCache[src];
@@ -152,7 +153,6 @@ Wan.getImages = function () {
 							localStorage.setItem(Wan.getCacheKey(img), dataURI);
 						}
 
-						img.removeAttribute('data-src');
 						parserIndex += parts[i].length + 1; //account for newline which was consumed in split
 					}
 				}
